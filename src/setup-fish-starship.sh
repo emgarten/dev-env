@@ -5,11 +5,12 @@ set -xe
 # install fish and required packages
 sudo apt install fish -y
 
+mkdir -p ~/.config/fish
+echo "set -g fish_greeting" > ~/.config/fish/config.fish
+
 # Install starship
 curl -sS https://starship.rs/install.sh | sh
 
-echo "set fish_greeting" >> ~/.config/fish/config.fish
-echo "end" >> ~/.config/fish/config.fish
 
 echo "starship init fish | source" >> ~/.config/fish/config.fish
 
