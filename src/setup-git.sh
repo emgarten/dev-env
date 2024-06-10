@@ -12,3 +12,4 @@ git config --global diff.algorithm patience
 git config --global rerere.enabled true
 
 echo "Git configuration updated successfully."
+more ~/.gitconfig
