@@ -1,9 +1,9 @@
 #!/bin/bash
 set -xe
 
-apt-get update
-apt-get dist-upgrade -y
-apt-get autoremove -y
+sudo apt-get update
+sudo apt-get dist-upgrade -y
+sudo apt-get autoremove -y
 
 if [ -f /var/run/reboot-required ]; then
   echo 'reboot required'
