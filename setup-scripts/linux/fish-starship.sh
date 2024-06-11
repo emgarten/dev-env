@@ -7,6 +7,8 @@ sudo apt install fish -y
 
 mkdir -p ~/.config/fish
 echo "set -g fish_greeting" > ~/.config/fish/config.fish
+echo "set -gx EDITOR nano" >> ~/.config/fish/config.fish
+echo "set -gx VISUAL nano" >> ~/.config/fish/config.fish
 
 # Install starship
 curl -sS https://starship.rs/install.sh | sh
@@ -32,4 +34,4 @@ starship preset no-nerd-font -o ~/.config/starship.toml
 chsh -s /usr/bin/fish
 
 # load the shell
-fish
+# fish

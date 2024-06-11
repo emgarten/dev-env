@@ -10,5 +10,7 @@ git config --global core.editor "code --wait"
 git config --global pull.rebase true
 git config --global diff.algorithm patience
 git config --global rerere.enabled true
+git config --global fetch.prune true
+git config --global mergetool.keepBackup false
 
 Write-Output "Git configuration updated successfully."
