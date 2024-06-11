@@ -10,6 +10,8 @@ git config --global core.editor "nano"
 git config --global pull.rebase true
 git config --global diff.algorithm patience
 git config --global rerere.enabled true
+git config --global fetch.prune true
+git config --global mergetool.keepBackup false
 
 echo "Git configuration updated successfully."
 more ~/.gitconfig
