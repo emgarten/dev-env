@@ -37,3 +37,8 @@ chsh -s /usr/bin/fish
 
 # load the shell
 # fish
+
+# Plugins
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+omf install bass
+omf install https://github.com/fabioantunes/fish-nvm
