@@ -21,3 +21,4 @@ fi
 
 git-credential-manager configure
 git config --global credential.azreposCredentialType oauth
+git config --global credential.credentialStore secretservice

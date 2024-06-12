@@ -9,6 +9,8 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+sudo apt install unzip -y
+
 # Create ~/bin directory if it doesn't exist
 mkdir -p ~/bin
 
@@ -45,6 +47,20 @@ else
     rm k9s.tgz
     echo "k9s installed successfully"
 fi
+
+# Install kubelogin
+if command_exists kubelogin; then
+    echo "kubelogin is already installed"
+else
+    echo "Installing kubelogin..."
+    curl -Lo kubelogin.zip https://github.com/int128/kubelogin/releases/download/v1.27.0/kubelogin_linux_amd64.zip
+    unzip kubelogin.zip kubelogin
+    rm kubelogin.zip
+    chmod +x kubelogin
+    mv kubelogin ~/bin/
+    echo "kubelogin installed successfully"
+fi
+
 
 # Install Minikube
 if command_exists minikube; then
