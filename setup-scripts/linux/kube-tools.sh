@@ -48,18 +48,19 @@ else
     echo "k9s installed successfully"
 fi
 
+# Use az aks install-cli instead
 # Install kubelogin
-if command_exists kubelogin; then
-    echo "kubelogin is already installed"
-else
-    echo "Installing kubelogin..."
-    curl -Lo kubelogin.zip https://github.com/int128/kubelogin/releases/download/v1.27.0/kubelogin_linux_amd64.zip
-    unzip kubelogin.zip kubelogin
-    rm kubelogin.zip
-    chmod +x kubelogin
-    mv kubelogin ~/bin/
-    echo "kubelogin installed successfully"
-fi
+# if command_exists kubelogin; then
+#     echo "kubelogin is already installed"
+# else
+#     echo "Installing kubelogin..."
+#     curl -Lo kubelogin.zip https://github.com/int128/kubelogin/releases/download/v1.27.0/kubelogin_linux_amd64.zip
+#     unzip kubelogin.zip kubelogin
+#     rm kubelogin.zip
+#     chmod +x kubelogin
+#     mv kubelogin ~/bin/
+#     echo "kubelogin installed successfully"
+# fi
 
 
 # Install Minikube
