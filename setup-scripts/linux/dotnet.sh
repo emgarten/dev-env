@@ -23,3 +23,6 @@ sudo apt update
 # sudo apt-get install -y dotnet-sdk-5.0
 # sudo apt-get install -y dotnet-sdk-6.0
 sudo apt-get install -y dotnet-sdk-8.0
+
+# install Azure Artifacts Credential Provider for dotnet restore
+wget -qO- https://aka.ms/install-artifacts-credprovider.sh | bash
