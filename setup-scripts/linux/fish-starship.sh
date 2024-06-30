@@ -3,18 +3,10 @@
 set -xe
 
 # install fish and required packages
-sudo apt install fish -y
-
-mkdir -p ~/bin
-mkdir -p ~/.config/fish
-echo "set -g fish_greeting" > ~/.config/fish/config.fish
-echo "set -gx EDITOR nano" >> ~/.config/fish/config.fish
-echo "set -gx VISUAL nano" >> ~/.config/fish/config.fish
-echo "fish_add_path ~/bin" >> ~/.config/fish/config.fish
+bash ./fish-basic.sh
 
 # Install starship
 curl -sS https://starship.rs/install.sh | sh
-
 
 echo "starship init fish | source" >> ~/.config/fish/config.fish
 
@@ -31,12 +23,6 @@ starship preset no-nerd-font -o ~/.config/starship.toml
 # unzip FiraCode.zip
 # rm FiraCode.zip
 # fc-cache -fv
-
-# Set fish as the default shell
-chsh -s /usr/bin/fish
-
-# load the shell
-# fish
 
 # Plugins
 curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
