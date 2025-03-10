@@ -13,9 +13,9 @@ if command_exists git-credential-manager; then
     echo "git-credential-manager is already installed"
 else
     echo "Installing git-credential-manager..."
-    curl -LO https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.5.0/gcm-linux_amd64.2.5.0.deb
-    sudo dpkg -i gcm-linux_amd64.2.5.0.deb
-    rm gcm-linux_amd64.2.5.0.deb
+    curl -LO https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.deb
+    sudo dpkg -i gcm-linux_amd64.2.6.1.deb
+    rm gcm-linux_amd64.2.6.1.deb
     echo "git-credential-manager installed successfully"
 fi
 
