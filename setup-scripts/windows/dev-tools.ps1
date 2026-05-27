@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 # Starship shell
-winget install starship
+winget install starship.starship
 
 # Add to $PROFILE
 # Invoke-Expression (&starship init powershell)
