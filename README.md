@@ -53,16 +53,24 @@ The two implementations track the default version separately: bash uses
 
 Scripts live in `setup-scripts/windows` and use [winget](https://learn.microsoft.com/windows/package-manager/winget/),
 so install "App Installer" from the Microsoft Store first if `winget` is
-missing. Each script is standalone and safe to re-run: packages that are already
-installed and up to date are skipped rather than treated as failures.
+missing. Run them in any order and as many times as you like: packages that are
+already installed and up to date are skipped rather than treated as failures.
+Each script dot-sources `common.ps1` from its own directory, so keep the folder
+intact rather than copying a single script out of it.
 
 | Script | What it does |
 | --- | --- |
 | `shell.ps1` | PowerShell 7, starship, and the starship init line in the PowerShell 7 profile |
-| `dev-tools.ps1` | Python 3.12, GNU make, k9s, helm, Azure CLI, plus `kubectl` and `kubelogin` via `az aks install-cli` |
+| `dev-tools.ps1` | Python 3.12, GNU make, Azure CLI |
+| `k8s-tools.ps1` | helm, k9s, plus `kubectl` and `kubelogin` via `az aks install-cli` |
 | `docker-desktop.ps1` | Docker Desktop (chocolatey, not winget) |
 | `git-cred-manager.ps1` | Git Credential Manager config (OAuth for Azure Repos and GitHub) |
 | `setup-git.ps1` | Global git config, prompts for name and email |
+| `common.ps1` | Shared winget helpers, dot-sourced by the scripts above rather than run directly |
+
+`k8s-tools.ps1` installs the Azure CLI as well, since `az aks install-cli` is
+what provides `kubectl` and `kubelogin`. That overlaps with `dev-tools.ps1` and
+is a no-op when the CLI is already there.
 
 Installers that write to the machine PATH need elevation, so expect UAC prompts.
 The scripts refresh PATH in-process where a later step depends on it, but open a
