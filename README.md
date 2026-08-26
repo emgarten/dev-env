@@ -62,6 +62,7 @@ intact rather than copying a single script out of it.
 | --- | --- |
 | `shell.ps1` | PowerShell 7, starship, and the starship init line in the PowerShell 7 profile |
 | `dev-tools.ps1` | Python 3.12, GNU make, Azure CLI |
+| `copilot-cli.ps1` | GitHub Copilot CLI (winget pulls in PowerShell 7, which it requires) |
 | `k8s-tools.ps1` | helm, k9s, plus `kubectl` and `kubelogin` via `az aks install-cli` |
 | `docker-desktop.ps1` | Docker Desktop (chocolatey, not winget) |
 | `git-cred-manager.ps1` | Git Credential Manager config (OAuth for Azure Repos and GitHub) |
@@ -70,7 +71,9 @@ intact rather than copying a single script out of it.
 
 `k8s-tools.ps1` installs the Azure CLI as well, since `az aks install-cli` is
 what provides `kubectl` and `kubelogin`. That overlaps with `dev-tools.ps1` and
-is a no-op when the CLI is already there.
+is a no-op when the CLI is already there. `copilot-cli.ps1` overlaps with
+`shell.ps1` in the same way: the Copilot CLI package depends on PowerShell 7, so
+winget installs it if `shell.ps1` has not already.
 
 Installers that write to the machine PATH need elevation, so expect UAC prompts.
 The scripts refresh PATH in-process where a later step depends on it, but open a
