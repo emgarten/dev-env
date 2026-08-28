@@ -13,12 +13,14 @@ Scripts live in `setup-scripts/linux`. Run them from that directory.
 `dev-tools.sh` installs the prerequisites the other scripts assume are present
 (`curl`, `git`, `python3`, `build-essential`), so run it first. `fish-starship.sh`
 sets fish as the login shell, and `nvm.sh` needs fish present to configure it,
-so run `nvm.sh` last:
+so run `nvm.sh` last. `copilot-cli.sh` configures fish too when it is there, so
+it also belongs after `fish-starship.sh`:
 
 ```bash
 ./dev-tools.sh        # prerequisites, includes curl
 ./fish-starship.sh    # fish + starship + fisher plugins
 ./nvm.sh              # nvm, Node LTS, defaults for bash and fish
+./copilot-cli.sh      # GitHub Copilot CLI, PATH for bash and fish
 ```
 
 `nvm.sh` is safe to re-run and can also be run on its own if fish is not wanted.
@@ -49,6 +51,27 @@ The two implementations track the default version separately: bash uses
 > configuration that deletes every installed Node version, including the ones
 > bash uses. Erase `nvm_data` before removing the plugin.
 
+### Copilot CLI
+
+`copilot-cli.sh` runs the official install script from
+[github/copilot-cli](https://github.com/github/copilot-cli), which drops the
+binary in `~/.local/bin` for a non-root install. It is safe to re-run.
+
+Two things are handled around that install rather than left to the installer:
+
+- It creates `~/.local/bin` and puts it on `PATH` before the install runs. The
+  installer only offers to edit a profile when `copilot` is missing from `PATH`
+  afterwards, and that prompt reads from `/dev/tty`, so this keeps the script
+  from stopping to ask a question mid-setup.
+- It writes the `PATH` entry for bash and fish itself. This is the same problem
+  `nvm.sh` works around: the installer picks a profile from `$SHELL`, which stops
+  matching bash once `fish-starship.sh` makes fish the login shell. Ubuntu's
+  stock `~/.profile` is no help either, since it only adds `~/.local/bin` when
+  that directory already exists at login, and fish never reads `~/.profile`.
+
+fish gets the entry through `fish_add_path -U`, and bash through a guarded block
+appended to `~/.bashrc`. Both are skipped when already present.
+
 ## Windows
 
 Scripts live in `setup-scripts/windows` and use [winget](https://learn.microsoft.com/windows/package-manager/winget/),
@@ -62,6 +85,7 @@ intact rather than copying a single script out of it.
 | --- | --- |
 | `shell.ps1` | PowerShell 7, starship, and the starship init line in the PowerShell 7 profile |
 | `dev-tools.ps1` | Python 3.12, GNU make, Azure CLI |
+| `copilot-cli.ps1` | GitHub Copilot CLI (winget pulls in PowerShell 7, which it requires) |
 | `k8s-tools.ps1` | helm, k9s, plus `kubectl` and `kubelogin` via `az aks install-cli` |
 | `docker-desktop.ps1` | Docker Desktop (chocolatey, not winget) |
 | `git-cred-manager.ps1` | Git Credential Manager config (OAuth for Azure Repos and GitHub) |
@@ -70,7 +94,9 @@ intact rather than copying a single script out of it.
 
 `k8s-tools.ps1` installs the Azure CLI as well, since `az aks install-cli` is
 what provides `kubectl` and `kubelogin`. That overlaps with `dev-tools.ps1` and
-is a no-op when the CLI is already there.
+is a no-op when the CLI is already there. `copilot-cli.ps1` overlaps with
+`shell.ps1` in the same way: the Copilot CLI package depends on PowerShell 7, so
+winget installs it if `shell.ps1` has not already.
 
 Installers that write to the machine PATH need elevation, so expect UAC prompts.
 The scripts refresh PATH in-process where a later step depends on it, but open a
