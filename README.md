@@ -13,12 +13,14 @@ Scripts live in `setup-scripts/linux`. Run them from that directory.
 `dev-tools.sh` installs the prerequisites the other scripts assume are present
 (`curl`, `git`, `python3`, `build-essential`), so run it first. `fish-starship.sh`
 sets fish as the login shell, and `nvm.sh` needs fish present to configure it,
-so run `nvm.sh` last:
+so run `nvm.sh` last. `copilot-cli.sh` configures fish too when it is there, so
+it also belongs after `fish-starship.sh`:
 
 ```bash
 ./dev-tools.sh        # prerequisites, includes curl
 ./fish-starship.sh    # fish + starship + fisher plugins
 ./nvm.sh              # nvm, Node LTS, defaults for bash and fish
+./copilot-cli.sh      # GitHub Copilot CLI, PATH for bash and fish
 ```
 
 `nvm.sh` is safe to re-run and can also be run on its own if fish is not wanted.
@@ -48,6 +50,27 @@ The two implementations track the default version separately: bash uses
 > `fisher remove jorgebucaran/nvm.fish` runs `rm -rf $nvm_data`. With the shared
 > configuration that deletes every installed Node version, including the ones
 > bash uses. Erase `nvm_data` before removing the plugin.
+
+### Copilot CLI
+
+`copilot-cli.sh` runs the official install script from
+[github/copilot-cli](https://github.com/github/copilot-cli), which drops the
+binary in `~/.local/bin` for a non-root install. It is safe to re-run.
+
+Two things are handled around that install rather than left to the installer:
+
+- It creates `~/.local/bin` and puts it on `PATH` before the install runs. The
+  installer only offers to edit a profile when `copilot` is missing from `PATH`
+  afterwards, and that prompt reads from `/dev/tty`, so this keeps the script
+  from stopping to ask a question mid-setup.
+- It writes the `PATH` entry for bash and fish itself. This is the same problem
+  `nvm.sh` works around: the installer picks a profile from `$SHELL`, which stops
+  matching bash once `fish-starship.sh` makes fish the login shell. Ubuntu's
+  stock `~/.profile` is no help either, since it only adds `~/.local/bin` when
+  that directory already exists at login, and fish never reads `~/.profile`.
+
+fish gets the entry through `fish_add_path -U`, and bash through a guarded block
+appended to `~/.bashrc`. Both are skipped when already present.
 
 ## Windows
 
