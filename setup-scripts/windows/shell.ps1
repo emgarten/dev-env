@@ -19,8 +19,19 @@ if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
 # Ask pwsh for its own profile path. This script may be running under Windows
 # PowerShell, whose $PROFILE points at WindowsPowerShell instead, and Documents
 # is often redirected to OneDrive.
-$pwshProfile = & pwsh -NoProfile -Command '$PROFILE.CurrentUserCurrentHost' | Select-Object -First 1
-if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($pwshProfile)) {
+# Collect the output before filtering it. Piping a native command straight into
+# 'Select-Object -First 1' stops the pipeline as soon as the first line arrives,
+# so pwsh never gets to set $LASTEXITCODE and it keeps the stale value from the
+# winget calls above - including the "already installed" codes those ignore.
+$pwshProfileOutput = @(& pwsh -NoProfile -Command '$PROFILE.CurrentUserCurrentHost')
+if ($LASTEXITCODE -ne 0) {
+    throw "pwsh exited with code $LASTEXITCODE while reporting its profile path."
+}
+
+$pwshProfile = $pwshProfileOutput |
+    Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+    Select-Object -First 1
+if ([string]::IsNullOrWhiteSpace($pwshProfile)) {
     throw "Could not determine the PowerShell 7 profile path."
 }
 $pwshProfile = $pwshProfile.Trim()
